@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-app>
+        <v-app
             <page-header></page-header>
             <main>
                 <v-container>
@@ -16,10 +16,17 @@ import PageHeader from '@/components/Header'
 
 export default {
     name: 'App',
-        components : {
-            PageHeader
+    components : {
+        PageHeader
+    },
+    created(){
+        if(this.$session.has('token')){
+            this.$store.dispatch('setToken',this.$session.get('token'))
+            this.$store.dispatch('setUser',this.$session.get('user'))
+            this.$router.push({ name: 'root'})
         }
     }
+}
 </script>
 
 <style>
@@ -30,5 +37,8 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+}
+.danger-alert {
+    color: red;
 }
 </style>

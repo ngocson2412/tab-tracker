@@ -1,27 +1,27 @@
 <template>
 	<v-layout comlumn>
 		<v-flex xs6 offset-xs3>
-			<div class = "white elevation-2">
-				<v-toolbar flat dense class ="cyan" dark>
-					<v-toolbar-title>Register</v-toolbar-title>
-				</v-toolbar>
+			<panel title="Login">
 				<div class ="pl-4 pr-4 pt-2 pb-2">
-					<v-text-field
-						name="email"
-						label="Email"
-						v-model ="email"
-					></v-text-field>
-					<v-text-field
-						name="password"
-						label="Password"
-						v-model ="password"
-					></v-text-field>
+					<form name="tab-tracker-form" autocomplete="off">
+						<v-text-field
+							name="email"
+							label="Email"
+							v-model ="email"
+						></v-text-field>
+						<v-text-field
+							name="password"
+							type="password"
+							label="Password"
+							v-model ="password"
+							autocomplete = "new-password"
+						></v-text-field>
+					</form>
 					<br>
-					<div class = "error" v-html="error"></div>
-					<button class="cyan" @click = "login">Register</button>
+					<div class = "danger-alert" v-html="error"></div>
+					<v-btn class="cyan" dark @click = "login">Login</v-btn>
 				</div>
-
-			</div>
+			</panel>
 		</v-flex>
 	</v-layout>
 </template>
@@ -43,7 +43,12 @@
 						email: this.email,
 						password: this.password
 					})
-					this.error = null;
+					this.$store.dispatch('setToken',response.data.token)
+					this.$store.dispatch('setUser',response.data.user)
+					this.error = null
+					this.$session.start()
+					this.$session.set('login_flag', 'Login successfull !!!')
+					this.$router.push({ name: 'root'})
 				} catch (err) {
 					this.error = err.response.data.error
 				}

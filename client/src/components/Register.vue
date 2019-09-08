@@ -1,10 +1,7 @@
 <template>
 	<v-layout comlumn>
 		<v-flex xs6 offset-xs3>
-			<div class = "white elevation-2">
-				<v-toolbar flat dense class ="cyan" dark>
-					<v-toolbar-title>Register</v-toolbar-title>
-				</v-toolbar>
+			<panel title="Register">
 				<div class ="pl-4 pr-4 pt-2 pb-2">
 					<v-text-field
 						name="email"
@@ -17,11 +14,10 @@
 						v-model ="password"
 					></v-text-field>
 					<br>
-					<div class = "error" v-html="error"></div>
-					<button class="cyan" @click = "register">Register</button>
+					<div class = "danger-alert" v-html="error"></div>
+					<button class="cyan" dark @click = "register">Register</button>
 				</div>
-
-			</div>
+			</panel>
 		</v-flex>
 	</v-layout>
 </template>
@@ -43,7 +39,12 @@
 						email: this.email,
 						password: this.password
 					})
+					this.$store.dispatch('setToken',response.data.token)
+					this.$store.dispatch('setUser',response.data.user)
 					this.error = null;
+					this.$session.start()
+					this.$session.set('login_flag', 'Login successfull !!!')
+					this.$router.push({ name: 'root'})
 				} catch (err) {
 					this.error = err.response.data.error
 				}
